@@ -61,18 +61,13 @@
                 });
                 next_btn.click(function (e) {
                     e.preventDefault();
-                    display.html(data[random_idx]["vocabulary"]);
                     random_idx = random(data);
-                    answer_btn.html("answer");
                     show_answer = !show_answer;
+                    display.html(data[random_idx]["vocabulary"]);
+                    answer_btn.html("answer");
                 });
             }
         });
-
-        
-        console.log(random(data));
-
-
     </script>
 
 </body>
