@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背單字好好玩</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="bg-black h-screen w-screen flex justify-center items-center">
+        <div class="text-[white] text-[40px]" id="display">haha</div>
+    </div>
+
+    <button id="answer"
+        class="fixed z-10 bottom-0 left-0 h-12 px-6 m-2 text-lg text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">answer</button>
+    <button id="next"
+        class="fixed z-10 bottom-0 right-0 h-12 px-6 m-2 text-lg text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">next</button>
+
+    <script>
+        function random(d) {
+            max = d.length - 1;
+            min = 0;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+
+        $.ajax({
+            type: "GET",
+            url: "./vocabulary.json",
+            data: "json",
+            dataType: "json",
+            success: function (response) {
+                
+
+                const data = response["vocabularies"];
+
+                let random_idx = random(data);
+
+                const display = $("#display");
+                const answer_btn = $("#answer");
+                const next_btn = $("#next");
+
+                display.html(data[random_idx]["vocabulary"]);
+
+                let show_answer = false;
+                answer_btn.click(function (e) {
+                    if (!show_answer) {
+                        e.preventDefault();
+                        display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
+                        $("#answer").html("back");
+                        show_answer = !show_answer;
+                    } else {
+                        $("#answer").html("answer");
+                        show_answer = !show_answer;
+                        display.html(data[random_idx]["vocabulary"]);
+                    }
+                });
+                next_btn.click(function (e) {
+                    e.preventDefault();
+                    display.html(data[random_idx]["vocabulary"]);
+                    random_idx = random(data);
+                    answer_btn.html("answer");
+                    show_answer = !show_answer;
+                });
+            }
+        });
+
+        
+        console.log(random(data));
+
+
+    </script>
+
+</body>
+
+</html>
