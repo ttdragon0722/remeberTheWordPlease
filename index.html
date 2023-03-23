@@ -45,8 +45,8 @@
                 const next_btn = $("#next");
 
                 display.html(data[random_idx]["vocabulary"]);
-
-                answer_btn.click(function (e) {
+                let show_answer = false;
+                answer_btn.click(function (e) { 
                     if (!show_answer) {
                         e.preventDefault();
                         display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
@@ -61,7 +61,7 @@
                 next_btn.click(function (e) {
                     e.preventDefault();
                     random_idx = random(data);
-                    let show_answer = false;
+                    show_answer = false;
                     display.html(data[random_idx]["vocabulary"]);
                     answer_btn.html("answer");
                 });
