@@ -46,7 +46,6 @@
 
                 display.html(data[random_idx]["vocabulary"]);
 
-                let show_answer = false;
                 answer_btn.click(function (e) {
                     if (!show_answer) {
                         e.preventDefault();
@@ -62,7 +61,7 @@
                 next_btn.click(function (e) {
                     e.preventDefault();
                     random_idx = random(data);
-                    show_answer = !show_answer;
+                    let show_answer = false;
                     display.html(data[random_idx]["vocabulary"]);
                     answer_btn.html("answer");
                 });
