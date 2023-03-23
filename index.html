@@ -12,8 +12,9 @@
 </head>
 
 <body>
-    <div class="bg-black h-screen w-screen flex justify-center items-center">
+    <div class="bg-black h-screen w-screen flex justify-center items-center flex-col">
         <div class="text-[white] text-[40px]" id="display">haha</div>
+        <div class="text-[white] text-[40px]" id="ans">haha</div>
     </div>
 
     <button id="answer"
@@ -42,28 +43,34 @@
 
                 const display = $("#display");
                 const answer_btn = $("#answer");
+                const answer_display = $("#ans");
                 const next_btn = $("#next");
 
                 display.html(data[random_idx]["vocabulary"]);
+                answer_display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
+                answer_display.hide()
                 let show_answer = false;
                 answer_btn.click(function (e) { 
                     if (!show_answer) {
                         e.preventDefault();
-                        display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
+                        answer_display.show();
                         $("#answer").html("back");
                         show_answer = !show_answer;
                     } else {
                         $("#answer").html("answer");
                         show_answer = !show_answer;
-                        display.html(data[random_idx]["vocabulary"]);
+                        answer_display.hide();
                     }
                 });
                 next_btn.click(function (e) {
                     e.preventDefault();
                     random_idx = random(data);
+                    answer_display.hide();
                     show_answer = false;
                     display.html(data[random_idx]["vocabulary"]);
+                    answer_display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
                     answer_btn.html("answer");
+
                 });
             }
         });
