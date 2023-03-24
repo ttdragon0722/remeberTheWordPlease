@@ -171,6 +171,8 @@
                         $("#max").prop("max",max_number);
                         $("#max").val(max_number);
                     } else {
+                        max_number = data.length;
+                        localStorage.setItem("max",max_number);
                         max_number = parseInt(localStorage.getItem("max"));
                         $("#max").prop("max",max_number);
                         $("#max").val(max_number);
