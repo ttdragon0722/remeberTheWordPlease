@@ -12,9 +12,41 @@
 </head>
 
 <body>
+
+
     <div class="bg-black h-screen w-screen flex justify-center items-center flex-col">
         <div class="text-[white] text-[40px]" id="display">haha</div>
         <div class="text-[white] text-[40px]" id="ans">haha</div>
+    </div>
+
+    <button
+        class="fixed z-[12] top-0 left-0 h-12 px-6 m-2 text-lg text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800"
+        id="setting">setting</button>
+
+    <div class="fixed z-[11] top-0 left-0 w-full h-screen bg-black text-center overflow-y-scroll mt-5" id="settingPage">
+        <center>
+            <div class="flex items-center mb-4 w-full justify-center">
+                <input id="mode-1" type="radio" value="" name="mode"
+                    class="mode-option w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="mode-1" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    random
+                </label>
+            </div>
+            <div class="flex items-center mb-4 w-full justify-center">
+                <input id="mode-2" type="radio" value="" name="mode"
+                    class="mode-option w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="mode-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    順序
+                </label>
+            </div>
+            <table class="list_table text-white">
+                <tr>
+                    <td align="center">index</td>
+                    <td align="center">word</td>
+                </tr>
+
+            </table>
+        </center>
     </div>
 
     <button id="answer"
@@ -29,51 +61,189 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         };
 
-        $.ajax({
-            type: "GET",
-            url: "./vocabulary.json",
-            data: "json",
-            dataType: "json",
-            success: function (response) {
-                
-
-                const data = response["vocabularies"];
-
-                let random_idx = random(data);
-
-                const display = $("#display");
-                const answer_btn = $("#answer");
-                const answer_display = $("#ans");
-                const next_btn = $("#next");
-
-                display.html(data[random_idx]["vocabulary"]);
-                answer_display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
-                answer_display.hide()
-                let show_answer = false;
-                answer_btn.click(function (e) { 
-                    if (!show_answer) {
-                        e.preventDefault();
-                        answer_display.show();
-                        $("#answer").html("back");
-                        show_answer = !show_answer;
-                    } else {
-                        $("#answer").html("answer");
-                        show_answer = !show_answer;
-                        answer_display.hide();
+        if (localStorage.getItem("mode") == null) {
+            localStorage.setItem("mode", "random");
+            $("#mode-1").prop("checked", true);
+        }
+        if (localStorage.getItem("mode") == "random") {
+            $("#mode-1").prop("checked", true);
+            $.ajax({
+                type: "GET",
+                url: "./vocabulary.json",
+                data: "json",
+                dataType: "json",
+                success: function (response) {
+                    const data = response["vocabularies"];
+                    
+                    for (var i = 0; i < data.length; i++) {
+                        $(".list_table").append(`<tr class="table_item"><td class="vocal_index" align="center">${i}</td><td align="center">${data[i]["vocabulary"]}</td></tr>`);
                     }
-                });
-                next_btn.click(function (e) {
-                    e.preventDefault();
-                    random_idx = random(data);
-                    answer_display.hide();
-                    show_answer = false;
-                    display.html(data[random_idx]["vocabulary"]);
-                    answer_display.html(data[random_idx]["partOfSpeech"]+"  "+data[random_idx]["chinese"]);
-                    answer_btn.html("answer");
 
-                });
+
+                    let random_idx = random(data);
+
+                    const display = $("#display");
+                    const answer_btn = $("#answer");
+                    const answer_display = $("#ans");
+                    const next_btn = $("#next");
+                    
+                    $(".table_item").click(function (e) {
+                        e.preventDefault();
+                        random_idx = parseInt($(this).children(".vocal_index").html());
+
+                        settingPage.hide();
+                        settingSwitch = !settingSwitch;
+                        localStorage.setItem("index", random_idx);
+
+                        answer_display.hide();
+                        show_answer = false;
+                        display.html(data[random_idx]["vocabulary"]);
+                        answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
+                        answer_btn.html("answer");
+                    });
+
+                    display.html(data[random_idx]["vocabulary"]);
+                    answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
+                    answer_display.hide()
+                    let show_answer = false;
+                    answer_btn.click(function (e) {
+                        if (!show_answer) {
+                            e.preventDefault();
+                            answer_display.show();
+                            $("#answer").html("back");
+                            show_answer = !show_answer;
+                        } else {
+                            $("#answer").html("answer");
+                            show_answer = !show_answer;
+                            answer_display.hide();
+                        }
+                    });
+                    next_btn.click(function (e) {
+                        e.preventDefault();
+                        random_idx = random(data);
+                        answer_display.hide();
+                        show_answer = false;
+                        display.html(data[random_idx]["vocabulary"]);
+                        answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
+                        answer_btn.html("answer");
+
+                    });
+                }
+            });
+        } else if (localStorage.getItem("mode") == "順序") {
+            $("#mode-2").prop("checked", true);
+
+            $.ajax({
+                type: "GET",
+                url: "./vocabulary.json",
+                data: "json",
+                dataType: "json",
+                success: function (response) {
+
+                    const data = response["vocabularies"];
+
+                    for (var i = 0; i < data.length; i++) {
+                        $(".list_table").append(`<tr class="table_item"><td class="vocal_index" align="center">${i}</td><td align="center">${data[i]["vocabulary"]}</td></tr>`);
+                    }
+
+
+                    let min_number = 0;
+                    let max_number = data.length;
+                    let random_idx;
+                    if (localStorage.getItem("index") === null) {
+                        random_idx = 0;
+                        localStorage.setItem("index", random_idx);
+                    } else {
+                        random_idx = parseInt(
+                            localStorage.getItem("index")
+                        )
+                    }
+                    const display = $("#display");
+                    const answer_btn = $("#answer");
+                    const answer_display = $("#ans");
+                    const next_btn = $("#next");
+
+                    $(".table_item").click(function (e) {
+                        e.preventDefault();
+                        random_idx = parseInt($(this).children(".vocal_index").html());
+
+                        settingPage.hide();
+                        settingSwitch = !settingSwitch;
+                        localStorage.setItem("index", random_idx);
+
+                        answer_display.hide();
+                        show_answer = false;
+                        display.html(data[random_idx]["vocabulary"]);
+                        answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
+                        answer_btn.html("answer");
+                    });
+
+                    display.html(data[random_idx]["vocabulary"]);
+                    answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
+                    answer_display.hide()
+                    let show_answer = false;
+                    answer_btn.click(function (e) {
+                        if (!show_answer) {
+                            e.preventDefault();
+                            answer_display.show();
+                            $("#answer").html("back");
+                            show_answer = !show_answer;
+                        } else {
+                            $("#answer").html("answer");
+                            show_answer = !show_answer;
+                            answer_display.hide();
+                        }
+                    });
+                    next_btn.click(function (e) {
+                        e.preventDefault();
+                        console.log(random_idx, max_number);
+
+                        random_idx++;
+                        if (random_idx == max_number) {
+                            random_idx = 0;
+                        }
+                        localStorage.setItem("index", random_idx);
+
+                        answer_display.hide();
+                        show_answer = false;
+                        display.html(data[random_idx]["vocabulary"]);
+                        answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
+                        answer_btn.html("answer");
+
+                    });
+                }
+            });
+        }
+
+        $('.mode-option').change(function () {
+            //檢查哪個radio被選中
+            if ($('#mode-1').is(':checked')) {
+                var selectedMode = $('#mode-1').val();
+                localStorage.setItem("mode", "random");
+                $(location).prop("href", location.href);
+            } else if ($('#mode-2').is(':checked')) {
+                var selectedMode = $('#mode-2').val();
+                localStorage.setItem("mode", "順序");
+                $(location).prop("href", location.href);
             }
         });
+
+        const settingPage = $("#settingPage")
+        let settingSwitch = true;
+        settingPage.hide();
+
+        $("#setting").click(function (e) {
+            e.preventDefault();
+            if (!settingSwitch) {
+                settingPage.hide();
+                settingSwitch = !settingSwitch;
+            } else if (settingSwitch) {
+                settingPage.show();
+                settingSwitch = !settingSwitch;
+            }
+        });
+
+
     </script>
 
 </body>
