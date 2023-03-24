@@ -28,16 +28,22 @@
             <div class="flex items-center mb-4 w-full justify-center">
                 <input id="mode-1" type="radio" value="" name="mode"
                     class="mode-option w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="mode-1" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                <label for="mode-1" class="ml-2 text-sm font-medium text-white">
                     random
                 </label>
             </div>
             <div class="flex items-center mb-4 w-full justify-center">
                 <input id="mode-2" type="radio" value="" name="mode"
                     class="mode-option w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="mode-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                <label for="mode-2" class="ml-2 text-sm font-medium text-white">
                     順序
                 </label>
+            </div>
+            <div class="my-5 text-white ">
+                <div>min:</div>
+                <input type="number" name="" id="min" class="text-black text-center number_input" min="0" max="" value="0">
+                <div>max:</div>
+                <input type="number" name="" id="max" class="text-black text-center number_input" min="0" max="" value="0">
             </div>
             <table class="list_table text-white">
                 <tr>
@@ -65,6 +71,7 @@
             localStorage.setItem("mode", "random");
             $("#mode-1").prop("checked", true);
         }
+
         if (localStorage.getItem("mode") == "random") {
             $("#mode-1").prop("checked", true);
             $.ajax({
@@ -74,7 +81,7 @@
                 dataType: "json",
                 success: function (response) {
                     const data = response["vocabularies"];
-                    
+
                     for (var i = 0; i < data.length; i++) {
                         $(".list_table").append(`<tr class="table_item"><td class="vocal_index" align="center">${i}</td><td align="center">${data[i]["vocabulary"]}</td></tr>`);
                     }
@@ -86,7 +93,7 @@
                     const answer_btn = $("#answer");
                     const answer_display = $("#ans");
                     const next_btn = $("#next");
-                    
+
                     $(".table_item").click(function (e) {
                         e.preventDefault();
                         random_idx = parseInt($(this).children(".vocal_index").html());
@@ -145,10 +152,29 @@
                     for (var i = 0; i < data.length; i++) {
                         $(".list_table").append(`<tr class="table_item"><td class="vocal_index" align="center">${i}</td><td align="center">${data[i]["vocabulary"]}</td></tr>`);
                     }
-
-
-                    let min_number = 0;
-                    let max_number = data.length;
+                    
+                    let min_number ;
+                    let max_number ;
+                    if (localStorage.getItem("min") == null || localStorage.getItem("min") == 0) {
+                        min_number = 0 ;
+                        localStorage.setItem("min", min_number);
+                        $("#min").prop("min",min_number);
+                        $("#min").val(min_number);
+                    } else {
+                        min_number = parseInt(localStorage.getItem("min"));
+                        $("#min").prop("min",min_number);
+                        $("#min").val(min_number);
+                    }
+                    if (localStorage.getItem("max") == null || localStorage.getItem("max") == 0) {
+                        max_number = data.length;
+                        localStorage.setItem("max",max_number);
+                        $("#max").prop("max",max_number);
+                        $("#max").val(max_number);
+                    } else {
+                        max_number = parseInt(localStorage.getItem("max"));
+                        $("#max").prop("max",max_number);
+                        $("#max").val(max_number);
+                    }
                     let random_idx;
                     if (localStorage.getItem("index") === null) {
                         random_idx = 0;
@@ -158,6 +184,18 @@
                             localStorage.getItem("index")
                         )
                     }
+
+                    $(".number_input").on("change", function () {
+                        console.log($(this).prop("id"));
+                        if ($(this).prop("id") == "min") {
+                            min_number = $(this).val();
+                            localStorage.setItem("min",min_number);
+                        } else if ($(this).prop("id") == "max") {
+                            max_number = $(this).val();
+                            localStorage.setItem("max",max_number);
+                        }
+                    });
+
                     const display = $("#display");
                     const answer_btn = $("#answer");
                     const answer_display = $("#ans");
@@ -200,7 +238,7 @@
 
                         random_idx++;
                         if (random_idx == max_number) {
-                            random_idx = 0;
+                            random_idx = min_number;
                         }
                         localStorage.setItem("index", random_idx);
 
