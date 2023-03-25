@@ -294,6 +294,13 @@
             });
         }
 
+        $("#display").click(function (e) { 
+            e.preventDefault();
+            const utterance = new SpeechSynthesisUtterance($(this).html());
+            speechSynthesis.speak(utterance);
+        });
+
+
         $('.mode-option').change(function () {
             //檢查哪個radio被選中
             if ($('#mode-1').is(':checked')) {
