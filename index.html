@@ -112,6 +112,19 @@
 
                     let random_idx = random(max_number,min_number);
 
+                    
+                    $(".number_input").on("change", function () {
+                        if ($(this).prop("id") == "min") {
+                            min_number = $(this).val();
+                            localStorage.setItem("min",min_number);
+                            console.log(min_number);
+                        } else if ($(this).prop("id") == "max") {
+                            max_number = $(this).val();
+                            localStorage.setItem("max",max_number);
+                            console.log(max_number);
+                        }
+                    });
+
                     const display = $("#display");
                     const answer_btn = $("#answer");
                     const answer_display = $("#ans");
@@ -150,9 +163,12 @@
                     });
                     next_btn.click(function (e) {
                         e.preventDefault();
-                        random_idx = random(max_number,min_number);
+                        random_idx = random(parseInt(max_number),parseInt(min_number));
                         answer_display.hide();
                         show_answer = false;
+                        console.log(random_idx);
+                        console.log(data[random_idx]);
+                        console.log(data[random_idx]["vocabulary"]);
                         display.html(data[random_idx]["vocabulary"]);
                         answer_display.html(data[random_idx]["partOfSpeech"] + "  " + data[random_idx]["chinese"]);
                         answer_btn.html("answer");
