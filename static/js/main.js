@@ -51,7 +51,7 @@ class WordProcessor {
     static get_data(func) {
         $.ajax({
             type: "GET",
-            url: "../../src/vocabulary.json",
+            url: "./src/vocabulary.json",
             data: "json",
             dataType: "json",
             success: function (response) {
