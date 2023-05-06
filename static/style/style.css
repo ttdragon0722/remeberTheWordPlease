@@ -1,0 +1,145 @@
+body {
+    background-color: #010409;
+    color: white;
+}
+
+.app {
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    position: relative;
+}
+
+.btn {
+    border: none;
+    outline: none;
+    background:#1f6feb;
+    color: white;
+    padding: 11px 25px;
+    width: fit-content;
+    /* margin-top: 10px; */
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: outline-offset 0.2s ease;
+    outline: #1f6feb 3px solid;
+}
+.btn:hover,.btn:focus {
+    outline-offset: 3px;
+}
+#menu {
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 10px;
+}
+
+
+.round {
+    border-radius: 100%;
+}
+
+#answerBtn {
+    position: absolute;
+    left: 5%;
+    bottom: 3%;
+}
+
+.rightLeftArea {
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+    position: absolute;
+    right: 5%;
+    bottom: 3%;
+}
+
+#prev {
+    position: relative;
+    margin-right: 8%;
+    right: 0;
+}
+
+.app > .container {
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+.container {
+    max-width: 425px;
+    margin: 0 auto;
+    padding: 0 5px;
+    height: 100%;
+    position: relative;
+}
+
+.question {
+    font-size: 40px;
+}
+.hint {
+    font-size: 30px;
+}
+
+.panel {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.setting {
+    background-color: white;
+    color: black;
+    overflow-y: scroll;
+}
+
+.header {
+    width: 100%;
+    height: 13vh;
+    text-align: right;
+    padding: 5% 5%;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.header > div {
+    margin: 0 3%;
+}
+
+.block {
+    margin: 2% 1.5%;
+    padding: 5% 5%;
+    border:rgba(128, 128, 128, 0.586) solid 2px;
+    border-radius: 10px;
+}
+
+.block h3 {
+    text-align: center;
+    margin-top: 2%;
+}
+.block > .options {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.block > table {
+    width: 100%;
+    text-align: center;
+}
+
+.chinese {
+    display: none;
+}
